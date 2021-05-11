@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ConnectorModel, DiagramComponent, NodeModel, PointPortModel, PortVisibility } from '@syncfusion/ej2-angular-diagrams';
-import { Connectors, Nodes } from './node.model';
+import { Connectors, JsonData, Nodes } from './node.model';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +12,10 @@ export class AppComponent {
   @ViewChild("diagram")
   public diagram: DiagramComponent;
 
+  
   public nodes: Nodes[] = [];
   public connectors: Connectors[] = [];
+  public diagramData = new JsonData(this.nodes,this.connectors);
 
   public node: NodeModel = {
     // Position of the node
@@ -62,13 +64,15 @@ export class AppComponent {
   }
 
   public checkObjectValue() {
-    console.log(this.nodes);
-    console.log(this.connectors);
+    // this.diagramData.nodes = this.nodes;
+    // this.diagramData.connectors = this.connectors;
+    console.log(this.diagramData);
+
   }
 
   public propertyChange() {
-    this.nodes = [];
-    this.connectors = [];
+    this.diagramData.nodes = [];
+    this.diagramData.connectors = [];
     for(let node of this.diagram.nodes) {
       let nodeTemp = new Nodes('',0,0,0,0,'');
       nodeTemp.id = node['properties'].id;
@@ -79,7 +83,7 @@ export class AppComponent {
       if(node.annotations.length > 0) {
         nodeTemp.title = node['properties'].annotations[0].properties.content;
       }
-      this.nodes.push(nodeTemp);
+      this.diagramData.nodes.push(nodeTemp);
     }
 
     for(let connector of this.diagram.connectors) {
@@ -92,8 +96,9 @@ export class AppComponent {
       if(connector.annotations.length > 0) {
         connectorTemp.pipeName = connector.annotations[0]['properties'].content;
       }
-      this.connectors.push(connectorTemp);
-    }    
+      this.diagramData.connectors.push(connectorTemp);
+    }
+
   }
 
 

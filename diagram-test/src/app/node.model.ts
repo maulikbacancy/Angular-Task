@@ -1,3 +1,10 @@
+export class JsonData {
+    constructor (
+        public nodes: Nodes[],
+        public connectors: Connectors[]
+    ){}
+}
+
 export class Nodes {
     constructor(
         public id: string,
