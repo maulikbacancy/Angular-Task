@@ -64,34 +64,33 @@ export class AppComponent {
   public checkObjectValue() {
     console.log(this.nodes);
     console.log(this.connectors);
-    
   }
 
-  public historyChange() {
+  public propertyChange() {
     this.nodes = [];
     this.connectors = [];
     for(let node of this.diagram.nodes) {
       let nodeTemp = new Nodes('',0,0,0,0,'');
-      nodeTemp.id = node.properties.id;
-      nodeTemp.offsetX = node.properties.offsetX;
-      nodeTemp.offsetY = node.properties.offsetY;
-      nodeTemp.width = node.properties.width;
-      nodeTemp.height = node.properties.height;
+      nodeTemp.id = node['properties'].id;
+      nodeTemp.offsetX = node['properties'].offsetX;
+      nodeTemp.offsetY = node['properties'].offsetY;
+      nodeTemp.width = node['properties'].width;
+      nodeTemp.height = node['properties'].height;
       if(node.annotations.length > 0) {
-        nodeTemp.title = node.properties.annotations[0].properties.content;
+        nodeTemp.title = node['properties'].annotations[0].properties.content;
       }
       this.nodes.push(nodeTemp);
     }
 
     for(let connector of this.diagram.connectors) {
       let connectorTemp = new Connectors('','',{action: '', outputPort: ''},{action: '', inputPort: ''});
-      connectorTemp.id = connector.properties.id;
-      connectorTemp.from.action = connector.properties.sourceID;
-      connectorTemp.from.outputPort = connector.properties.sourcePortID;
-      connectorTemp.to.action = connector.properties.targetID;
-      connectorTemp.to.inputPort = connector.properties.targetPortID;
+      connectorTemp.id = connector['properties'].id;
+      connectorTemp.from.action = connector['properties'].sourceID;
+      connectorTemp.from.outputPort = connector['properties'].sourcePortID;
+      connectorTemp.to.action = connector['properties'].targetID;
+      connectorTemp.to.inputPort = connector['properties'].targetPortID;
       if(connector.annotations.length > 0) {
-        connectorTemp.pipeName = connector.annotations[0].properties.content;
+        connectorTemp.pipeName = connector.annotations[0]['properties'].content;
       }
       this.connectors.push(connectorTemp);
     }    
