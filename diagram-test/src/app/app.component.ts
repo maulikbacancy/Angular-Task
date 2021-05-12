@@ -64,10 +64,7 @@ export class AppComponent {
   }
 
   public checkObjectValue() {
-    // this.diagramData.nodes = this.nodes;
-    // this.diagramData.connectors = this.connectors;
-    console.log(this.diagramData);
-
+    console.log(this.diagramData);    
   }
 
   public propertyChange() {

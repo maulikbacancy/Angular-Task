@@ -3,6 +3,8 @@ import { DiagramComponent } from '@syncfusion/ej2-angular-diagrams';
 import { Connector, ConnectorModel, FlowShapeModel, IDragEnterEventArgs, IHistoryChangeArgs, MarginModel, NodeModel, OrthogonalSegmentModel, PaletteModel, PointPortModel, SnapSettingsModel, StrokeStyleModel, SymbolInfo, TextStyleModel } from '@syncfusion/ej2-diagrams';
 import { ExpandMode } from '@syncfusion/ej2-navigations';
 import { paletteIconClick } from '../script/diagram-common';
+import { CentralDataService } from './central-data.service';
+import { Connectors, JsonData, Nodes } from './node.model';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,23 +13,16 @@ import { paletteIconClick } from '../script/diagram-common';
 })
 export class AppComponent {
   title = 'diagram';
+
+  constructor(private dataService: CentralDataService) {}
+
   @ViewChild("diagram")
     public diagram: DiagramComponent;
 
-    public terminator: FlowShapeModel = { type: 'Flow', shape: 'Terminator' };
-    public process: FlowShapeModel = { type: 'Flow', shape: 'Process' };
-    public decision: FlowShapeModel = { type: 'Flow', shape: 'Decision' };
-    public data: FlowShapeModel = { type: 'Flow', shape: 'Data' };
-    public directdata: FlowShapeModel = { type: 'Flow', shape: 'DirectData' };
-  
-    public margin: MarginModel = { left: 25, right: 25 };
-    public connAnnotStyle: TextStyleModel = { fill: 'white' };
-    public strokeStyle: StrokeStyleModel = { strokeDashArray: '2,2' };
-  
-    public segments: OrthogonalSegmentModel = [{ type: 'Orthogonal', direction: 'Top', length: 120 }];
-    public segments1: OrthogonalSegmentModel = [
-      { type: 'Orthogonal', direction: 'Right', length: 100 }
-    ];
+    public nodes: Nodes[] = [];
+    public connectors: Connectors[] = [];
+    public diagramData = new JsonData(this.nodes,this.connectors);
+
   
     public nodeDefaults(node: NodeModel): NodeModel {
       let obj: NodeModel = {};
@@ -43,147 +38,14 @@ export class AppComponent {
       obj.ports = getPorts(node);
       return obj;
     }
+
     public connDefaults(obj: Connector): void {
       if (obj.id.indexOf('connector') !== -1) {
         obj.type = 'Orthogonal';
         obj.targetDecorator = { shape: 'Arrow', width: 10, height: 10 };
       }
     }
-    public created(): void {
-      this.diagram.fitToPage();
-    }
-    public interval: number[] = [
-      1, 9, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25,
-      9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75
-    ];
-  
-    public snapSettings: SnapSettingsModel = {
-      horizontalGridlines: { lineColor: '#e0e0e0', lineIntervals: this.interval },
-      verticalGridlines: { lineColor: '#e0e0e0', lineIntervals: this.interval }
-    };
-  
-    public dragEnter(args: IDragEnterEventArgs): void {
-      let obj: NodeModel = args.element as NodeModel;
-      if (obj && obj.width && obj.height) {
-        let oWidth: number = obj.width;
-        let oHeight: number = obj.height;
-        let ratio: number = 100 / obj.width;
-        obj.width = 100;
-        obj.height *= ratio;
-        obj.offsetX += (obj.width - oWidth) / 2;
-        obj.offsetY += (obj.height - oHeight) / 2;
-        obj.style = { fill: '#357BD2', strokeColor: 'white' };
-      }
-    }
-  
-    //SymbolPalette Properties
-    public symbolMargin: MarginModel = { left: 15, right: 15, top: 15, bottom: 15 };
-    public expandMode: ExpandMode = 'Multiple';
-    //Initialize the flowshapes for the symbol palatte
-    private flowshapes: NodeModel[] = [
-      { id: 'Terminator', shape: { type: 'Flow', shape: 'Terminator' } },
-      { id: 'Process', shape: { type: 'Flow', shape: 'Process' } },
-      { id: 'Decision', shape: { type: 'Flow', shape: 'Decision' } },
-      { id: 'Document', shape: { type: 'Flow', shape: 'Document' } },
-      { id: 'PreDefinedProcess', shape: { type: 'Flow', shape: 'PreDefinedProcess' } },
-      { id: 'PaperTap', shape: { type: 'Flow', shape: 'PaperTap' } },
-      { id: 'DirectData', shape: { type: 'Flow', shape: 'DirectData' } },
-      { id: 'SequentialData', shape: { type: 'Flow', shape: 'SequentialData' } },
-      { id: 'Sort', shape: { type: 'Flow', shape: 'Sort' } },
-      { id: 'MultiDocument', shape: { type: 'Flow', shape: 'MultiDocument' } },
-      { id: 'Collate', shape: { type: 'Flow', shape: 'Collate' } },
-      { id: 'SummingJunction', shape: { type: 'Flow', shape: 'SummingJunction' } },
-      { id: 'Or', shape: { type: 'Flow', shape: 'Or' } },
-      {
-        id: 'InternalStorage',
-        shape: { type: 'Flow', shape: 'InternalStorage' }
-      },
-      { id: 'Extract', shape: { type: 'Flow', shape: 'Extract' } },
-      {
-        id: 'ManualOperation',
-        shape: { type: 'Flow', shape: 'ManualOperation' }
-      },
-      { id: 'Merge', shape: { type: 'Flow', shape: 'Merge' } },
-      {
-        id: 'OffPageReference',
-        shape: { type: 'Flow', shape: 'OffPageReference' }
-      },
-      {
-        id: 'SequentialAccessStorage',
-        shape: { type: 'Flow', shape: 'SequentialAccessStorage' }
-      },
-      { id: 'Annotation', shape: { type: 'Flow', shape: 'Annotation' } },
-      { id: 'Annotation2', shape: { type: 'Flow', shape: 'Annotation2' } },
-      { id: 'Data', shape: { type: 'Flow', shape: 'Data' } },
-      { id: 'Card', shape: { type: 'Flow', shape: 'Card' } },
-      { id: 'Delay', shape: { type: 'Flow', shape: 'Delay' } }
-    ];
-  
-    //Initializes connector symbols for the symbol palette
-    private connectorSymbols: ConnectorModel[] = [
-      {
-        id: 'Link1',
-        type: 'Orthogonal',
-        sourcePoint: { x: 0, y: 0 },
-        targetPoint: { x: 60, y: 60 },
-        targetDecorator: { shape: 'Arrow', style: {strokeColor: '#757575', fill: '#757575'} },
-        style: { strokeWidth: 1, strokeColor: '#757575' }
-      },
-      {
-        id: 'link3',
-        type: 'Orthogonal',
-        sourcePoint: { x: 0, y: 0 },
-        targetPoint: { x: 60, y: 60 },
-        style: { strokeWidth: 1, strokeColor: '#757575' },
-        targetDecorator: { shape: 'None' }
-      },
-      {
-        id: 'Link21',
-        type: 'Straight',
-        sourcePoint: { x: 0, y: 0 },
-        targetPoint: { x: 60, y: 60 },
-        targetDecorator: { shape: 'Arrow', style: {strokeColor: '#757575', fill: '#757575'} },
-        style: { strokeWidth: 1, strokeColor: '#757575' }
-      },
-      {
-        id: 'link23',
-        type: 'Straight',
-        sourcePoint: { x: 0, y: 0 },
-        targetPoint: { x: 60, y: 60 },
-        style: { strokeWidth: 1, strokeColor: '#757575' },
-        targetDecorator: { shape: 'None' }
-      },
-      {
-        id: 'link33',
-        type: 'Bezier',
-        sourcePoint: { x: 0, y: 0 },
-        targetPoint: { x: 60, y: 60 },
-        style: { strokeWidth: 1, strokeColor: '#757575' },
-        targetDecorator: { shape: 'None' }
-      }
-    ];
-  
-    public palettes: PaletteModel[] = [
-      {
-        id: 'flow',
-        expanded: true,
-        symbols: this.flowshapes,
-        iconCss: 'shapes',
-        title: 'Flow Shapes'
-      },
-      {
-        id: 'connectors',
-        expanded: true,
-        symbols: this.connectorSymbols,
-        iconCss: 'shapes',
-        title: 'Connectors'
-      }
-    ];
-  
-    public getSymbolInfo(symbol: NodeModel): SymbolInfo {
-      return { fit: true };
-    }
-  
+
     public getSymbolDefaults(symbol: NodeModel): void {
       symbol.style.strokeColor = '#757575';
       if (symbol.id === 'Terminator' || symbol.id === 'Process') {
@@ -205,6 +67,52 @@ export class AppComponent {
         symbol.height = 50;
       }      
     }
+
+    
+    //SymbolPalette Properties
+    public symbolMargin: MarginModel = { left: 15, right: 15, top: 15, bottom: 15 };
+    public expandMode: ExpandMode = 'Multiple';
+    
+  //SymbolPalette symbols
+    public palettes: PaletteModel[] = [
+      {
+        id: 'flow',
+        expanded: true,
+        symbols: this.dataService.flowshapes,
+        iconCss: 'shapes',
+        title: 'Flow Shapes'
+      },
+      {
+        id: 'connectors',
+        expanded: true,
+        symbols: this.dataService.connectorSymbols,
+        iconCss: 'shapes',
+        title: 'Connectors'
+      }
+    ];
+ 
+  
+    public dragEnter(args: IDragEnterEventArgs): void {
+      let obj: NodeModel = args.element as NodeModel;
+      if (obj && obj.width && obj.height) {
+        let oWidth: number = obj.width;
+        let oHeight: number = obj.height;
+        let ratio: number = 100 / obj.width;
+        obj.width = 100;
+        obj.height *= ratio;
+        obj.offsetX += (obj.width - oWidth) / 2;
+        obj.offsetY += (obj.height - oHeight) / 2;
+        obj.style = { fill: '#357BD2', strokeColor: 'white' };
+      }
+    }
+  
+    
+  
+    public getSymbolInfo(symbol: NodeModel): SymbolInfo {
+      return { fit: true };
+    }
+  
+    
   
     
   
@@ -212,8 +120,43 @@ export class AppComponent {
       paletteIconClick();
     }
 
-   
-    
+    public created(): void {
+      this.diagram.fitToPage();
+    }
+
+    public checkObjectValue() {
+      console.log(this.diagramData);
+    }
+
+    public propertyChange() {
+      this.diagramData.nodes = [];
+      this.diagramData.connectors = [];
+      for(let node of this.diagram.nodes) {
+        let nodeTemp = new Nodes('',0,0,0,0,'');
+        nodeTemp.id = node['properties'].id;
+        nodeTemp.offsetX = node['properties'].offsetX;
+        nodeTemp.offsetY = node['properties'].offsetY;
+        nodeTemp.width = node['properties'].width;
+        nodeTemp.height = node['properties'].height;
+        if(node.annotations.length > 0) {
+          nodeTemp.title = node['properties'].annotations[0].properties.content;
+        }
+        this.diagramData.nodes.push(nodeTemp);
+      }
+  
+      for(let connector of this.diagram.connectors) {
+        let connectorTemp = new Connectors('','',{action: '', outputPort: ''},{action: '', inputPort: ''});
+        connectorTemp.id = connector['properties'].id;
+        connectorTemp.from.action = connector['properties'].sourceID;
+        connectorTemp.from.outputPort = connector['properties'].sourcePortID;
+        connectorTemp.to.action = connector['properties'].targetID;
+        connectorTemp.to.inputPort = connector['properties'].targetPortID;
+        if(connector.annotations.length > 0) {
+          connectorTemp.pipeName = connector.annotations[0]['properties'].content;
+        }
+        this.diagramData.connectors.push(connectorTemp);
+      }
+    }
 }
 
 function getPorts(obj: NodeModel): PointPortModel[] {
