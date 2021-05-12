@@ -1,6 +1,6 @@
 import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DiagramComponent } from '@syncfusion/ej2-angular-diagrams';
-import { Connector, ConnectorModel, FlowShapeModel, IDragEnterEventArgs, IHistoryChangeArgs, MarginModel, NodeModel, OrthogonalSegmentModel, PaletteModel, PointPortModel, SnapSettingsModel, StrokeStyleModel, SymbolInfo, TextStyleModel } from '@syncfusion/ej2-diagrams';
+import { Connector, IDragEnterEventArgs,  MarginModel, NodeModel, PaletteModel, PointPortModel, SymbolInfo} from '@syncfusion/ej2-diagrams';
 import { ExpandMode } from '@syncfusion/ej2-navigations';
 import { paletteIconClick } from '../script/diagram-common';
 import { CentralDataService } from './central-data.service';
@@ -125,38 +125,37 @@ export class AppComponent {
     }
 
     public checkObjectValue() {
-      console.log(this.diagramData);
+      console.log(this.diagramData);      
     }
 
     public propertyChange() {
       this.diagramData.nodes = [];
       this.diagramData.connectors = [];
-      for(let node of this.diagram.nodes) {
-        let nodeTemp = new Nodes('',0,0,0,0,'');
-        nodeTemp.id = node['properties'].id;
-        nodeTemp.offsetX = node['properties'].offsetX;
-        nodeTemp.offsetY = node['properties'].offsetY;
-        nodeTemp.width = node['properties'].width;
-        nodeTemp.height = node['properties'].height;
-        if(node.annotations.length > 0) {
-          nodeTemp.title = node['properties'].annotations[0].properties.content;
-        }
+
+      this.diagram.nodes.forEach((element) => {
+        const nodeTemp: Nodes = {
+          id: element.id,
+          offsetX: element.offsetX,
+          offsetY: element.offsetY,
+          width: element.width,
+          height: element.height,
+          title: element.annotations.length > 0 ? element.annotations[0].content : ''
+        };
         this.diagramData.nodes.push(nodeTemp);
-      }
-  
-      for(let connector of this.diagram.connectors) {
-        let connectorTemp = new Connectors('','',{action: '', outputPort: ''},{action: '', inputPort: ''});
-        connectorTemp.id = connector['properties'].id;
-        connectorTemp.from.action = connector['properties'].sourceID;
-        connectorTemp.from.outputPort = connector['properties'].sourcePortID;
-        connectorTemp.to.action = connector['properties'].targetID;
-        connectorTemp.to.inputPort = connector['properties'].targetPortID;
-        if(connector.annotations.length > 0) {
-          connectorTemp.pipeName = connector.annotations[0]['properties'].content;
-        }
+      });
+
+      this.diagram.connectors.forEach((element) => {
+        const connectorTemp: Connectors = {
+          id: element.id,
+          from: {action: element.sourceID, outputPort: element.sourcePortID},
+          to: {action: element.targetID, inputPort: element.targetPortID},
+          pipeName: element.annotations.length > 0 ? element.annotations[0].content : ''
+        };
         this.diagramData.connectors.push(connectorTemp);
-      }
+      });
     }
+    
+    
 }
 
 function getPorts(obj: NodeModel): PointPortModel[] {

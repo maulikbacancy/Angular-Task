@@ -40,11 +40,12 @@ export class CentralDataService {
       id: 'SequentialAccessStorage',
       shape: { type: 'Flow', shape: 'SequentialAccessStorage' }
     },
+    
     { id: 'Annotation', shape: { type: 'Flow', shape: 'Annotation' } },
     { id: 'Annotation2', shape: { type: 'Flow', shape: 'Annotation2' } },
     { id: 'Data', shape: { type: 'Flow', shape: 'Data' } },
     { id: 'Card', shape: { type: 'Flow', shape: 'Card' } },
-    { id: 'Delay', shape: { type: 'Flow', shape: 'Delay' } }
+    { id: 'Delay', shape: { type: 'Flow', shape: 'Delay' } },
   ];
 
   //Initializes connector symbols for the symbol palette
