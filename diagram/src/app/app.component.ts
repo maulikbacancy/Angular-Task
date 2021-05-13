@@ -125,13 +125,14 @@ export class AppComponent {
     }
 
     public checkObjectValue() {
-      console.log(this.diagramData);      
+      console.log(this.diagramData);
+      console.log(this.diagram);
+            
     }
 
     public propertyChange() {
       this.diagramData.nodes = [];
       this.diagramData.connectors = [];
-
       this.diagram.nodes.forEach((element) => {
         const nodeTemp: Nodes = {
           id: element.id,
