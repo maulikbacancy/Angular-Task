@@ -126,8 +126,6 @@ export class AppComponent {
 
     public checkObjectValue() {
       console.log(this.diagramData);
-      console.log(this.diagram);
-            
     }
 
     public propertyChange() {
