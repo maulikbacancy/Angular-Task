@@ -1,0 +1,105 @@
+@import '~ngx-toastr/toastr';
+
+.container{
+    margin-top: 30px;
+}
+
+pre {
+    color: red;
+}
+
+body {
+    background-color: rgb(93, 28, 139)
+}
+
+input {
+    border: none;
+    outline: none !important
+}
+
+.container {
+    border-radius: 15px
+}
+
+.fb-logo {
+    width: 27px;
+    height: 27px;
+}
+
+@media(min-width:992px) {
+    .logo {
+        width: 500px;
+        height: 500px
+    }
+
+    #circle {
+        border: 10px solid rgba(255, 0, 234, 0.945);
+        border-radius: 50%;
+        position: absolute;
+        height: 50px;
+        width: 50px;
+        left: 290px;
+        top: -25px
+    }
+
+    .container {
+        background-image: linear-gradient(to bottom, rgb(255, 255, 255) 80%, rgb(242, 242, 253), rgb(164, 164, 235))
+    }
+}
+
+@media(max-width:991px) {
+    .logo {
+        display: none
+    }
+
+    #circle {
+        border: 10px solid rgba(255, 0, 234, 0.945);
+        border-radius: 50%;
+        position: absolute;
+        height: 50px;
+        width: 50px;
+        left: 100px;
+        top: -25px
+    }
+
+    .container {
+        background-image: linear-gradient(to bottom, rgb(255, 255, 255) 80%, rgb(242, 242, 253), rgb(164, 164, 235))
+    }
+}
+
+@media(max-width:768px) {
+    .logo {
+        display: none
+    }
+
+    #circle {
+        border: 10px solid rgba(255, 0, 234, 0.945);
+        border-radius: 50%;
+        position: absolute;
+        height: 50px;
+        width: 50px;
+        left: 302px;
+        top: -29px
+    }
+}
+
+@media(max-width:567px) {
+    .logo{
+        display: none
+    }
+
+    .container {
+        margin-left: 0px;
+        margin-top: 30px
+    }
+
+    #circle {
+        border: 10px solid rgba(255, 0, 234, 0.945);
+        border-radius: 50%;
+        position: absolute;
+        height: 50px;
+        width: 50px;
+        left: 202px;
+        top: -29px
+    }
+}

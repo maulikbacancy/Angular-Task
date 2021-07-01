@@ -1,23 +1,22 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
+import { AuthComponent } from './auth.component';
+import { SharedModule } from '../../core/modules/shared.module';
+import { LoggedinGuard } from '../../core/guard/loggedin.guard';
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { LoginComponent } from './login/login.component';
+
+
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    HeaderComponent
-  ],
+  declarations: [AuthComponent],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
+    CommonModule,
     FormsModule,
-    SocialLoginModule
+    SharedModule,
+    SocialLoginModule,
+    RouterModule.forChild([{ path: '', component: AuthComponent , canActivate: [LoggedinGuard]}])
   ],
   providers: [
     {
@@ -38,7 +37,6 @@ import { LoginComponent } from './login/login.component';
         ]
       } as SocialAuthServiceConfig,
     }
-  ],
-  bootstrap: [AppComponent]
+  ]
 })
-export class AppModule { }
+export class AuthModule { }

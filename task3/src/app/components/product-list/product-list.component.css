@@ -1,0 +1,17 @@
+@import '~ngx-toastr/toastr';
+
+.divback {
+    background-color: #F2F2F2;
+}
+img {
+    height: 120px;
+    width: 120px;
+    padding: 10px;
+}
+.contentbox {
+    text-overflow: ellipsis;
+}
+
+.pagemargin {
+    margin-top: 15px;
+}
